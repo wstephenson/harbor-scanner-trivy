@@ -1,9 +1,6 @@
 [![GitHub Release][release-img]][release]
-[![GitHub Build Actions][build-action-img]][actions]
 [![Go Report Card][report-card-img]][report-card]
 [![License][license-img]][license]
-![Docker Pulls / Aqua][docker-pulls-aqua]
-![Docker Pulls / Harbor][docker-pulls-harbor]
 
 # Harbor Scanner Adapter for Trivy
 
@@ -23,8 +20,6 @@ For compliance with core components Harbor builds the adapter service binaries i
 
 - [Version Matrix](#version-matrix)
 - [Deployment](#deployment)
-  - [Harbor >= 2.0 on Kubernetes](#harbor--20-on-kubernetes)
-  - [Harbor 1.10 on Kubernetes](#harbor-110-on-kubernetes)
 - [Configuration](#configuration)
 - [Documentation](#documentation)
 - [Troubleshooting](#troubleshooting)
@@ -35,96 +30,22 @@ For compliance with core components Harbor builds the adapter service binaries i
 The following matrix indicates the version of Trivy and Trivy adapter installed in each Harbor
 [release](https://github.com/goharbor/harbor/releases).
 
-| Harbor           | Trivy Adapter | Trivy           |
-|------------------|---------------|-----------------|
-| -                | v0.31.4       | [trivy v0.54.1] |
-| -                | v0.31.3       | [trivy v0.52.2] |
-| -                | v0.31.2       | [trivy v0.51.2] |
-| -                | v0.31.1       | [trivy v0.50.4] |
-| -                | v0.31.0       | [trivy v0.50.1] |
-| -                | v0.30.23      | [trivy v0.50.1] |
-| -                | v0.30.22      | [trivy v0.49.1] |
-| -                | v0.30.21      | [trivy v0.48.3] |
-| -                | v0.30.20      | [trivy v0.48.1] |
-| -                | v0.30.19      | [trivy v0.47.0] |
-| -                | v0.30.18      | [trivy v0.46.1] |
-| -                | v0.30.17      | [trivy v0.46.0] |
-| -                | v0.30.16      | [trivy v0.45.0] |
-| -                | v0.30.15      | [trivy v0.44.0] |
-| -                | v0.30.14      | [trivy v0.43.0] |
-| -                | v0.30.13      | [trivy v0.43.0] |
-| -                | v0.30.12      | [trivy v0.42.0] |
-| -                | v0.30.11      | [trivy v0.40.0] |
-| -                | v0.30.10      | [trivy v0.39.0] |
-| -                | v0.30.9       | [trivy v0.38.2] |
-| -                | v0.30.8       | [trivy v0.38.2] |
-| -                | v0.30.7       | [trivy v0.37.2] |
-| -                | v0.30.6       | [trivy v0.35.0] |
-| -                | v0.30.5       | [trivy v0.35.0] |
-| -                | v0.30.4       | [trivy v0.35.0] |
-| -                | v0.30.3       | [trivy v0.35.0] |
-| -                | v0.30.2       | [trivy v0.32.1] |
-| -                | v0.30.0       | [trivy v0.29.2] |
-| -                | v0.29.0       | [trivy v0.28.1] |
-| [harbor v2.5.1]  | v0.28.0       | [trivy v0.26.0] |
-| -                | v0.27.0       | [trivy v0.25.0] |
-| [harbor v2.5.0]  | v0.26.0       | [trivy v0.24.2] |
-| -                | v0.25.0       | [trivy v0.22.0] |
-| [harbor v2.4.1]  | v0.24.0       | [trivy v0.20.1] |
-| [harbor v2.4.0]  | v0.24.0       | [trivy v0.20.1] |
-| -                | v0.23.0       | [trivy v0.20.0] |
-| -                | v0.22.0       | [trivy v0.19.2] |
-| -                | v0.21.0       | [trivy v0.19.2] |
-| -                | v0.20.0       | [trivy v0.18.3] |
-| [harbor v2.3.3]  | v0.19.0       | [trivy v0.17.2] |
-| [harbor v2.3.0]  | v0.19.0       | [trivy v0.17.2] |
-| [harbor v2.2.3]  | v0.18.0       | [trivy v0.16.0] |
-| [harbor v2.2.0]  | v0.18.0       | [trivy v0.16.0] |
-| [harbor v2.1.6]  | v0.14.1       | [trivy v0.9.2]  |
-| [harbor v2.1.0]  | v0.14.1       | [trivy v0.9.2]  |
+| Harbor                  | Trivy Adapter | Trivy           |
+|-------------------------|---------------|-----------------|
+| harbor v2.11.1          | v0.31.4       | [trivy v0.54.1] |
+| -                       | v0.31.3       | [trivy v0.52.2] |
+| harbor v2.11.0          | v0.31.2       | [trivy v0.51.2] |
+| -                       | v0.31.1       | [trivy v0.50.4] |
+| -                       | v0.31.0       | [trivy v0.50.1] |
+| harbor v2.10.3, v2.10.2 | v0.30.23      | [trivy v0.50.1] |
+| harbor v2.10.1          | v0.30.22      | [trivy v0.49.1] |
+| -                       | v0.30.21      | [trivy v0.48.3] |
+| -                       | v0.30.20      | [trivy v0.48.1] |
+| harbor v2.10.0          | v0.30.19      | [trivy v0.47.0] |
 
-[harbor v2.5.1]: https://github.com/goharbor/harbor/releases/tag/v2.5.1
-[harbor v2.5.0]: https://github.com/goharbor/harbor/releases/tag/v2.5.0
-[harbor v2.4.1]: https://github.com/goharbor/harbor/releases/tag/v2.4.1
-[harbor v2.4.0]: https://github.com/goharbor/harbor/releases/tag/v2.4.0
-[harbor v2.3.3]: https://github.com/goharbor/harbor/releases/tag/v2.3.3
-[harbor v2.3.0]: https://github.com/goharbor/harbor/releases/tag/v2.3.0
-[harbor v2.2.3]: https://github.com/goharbor/harbor/releases/tag/v2.2.3
-[harbor v2.2.0]: https://github.com/goharbor/harbor/releases/tag/v2.2.0
-[harbor v2.1.6]: https://github.com/goharbor/harbor/releases/tag/v2.1.6
-[harbor v2.1.0]: https://github.com/goharbor/harbor/releases/tag/v2.1.0
-
-[trivy v0.48.1]: https://github.com/aquasecurity/trivy/releases/tag/v0.48.1
-[trivy v0.47.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.47.0
-[trivy v0.46.1]: https://github.com/aquasecurity/trivy/releases/tag/v0.46.1
-[trivy v0.46.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.46.0
-[trivy v0.45.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.45.0
-[trivy v0.44.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.44.0
-[trivy v0.43.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.43.0
-[trivy v0.42.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.42.0
-[trivy v0.40.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.40.0
-[trivy v0.39.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.39.0
-[trivy v0.38.2]: https://github.com/aquasecurity/trivy/releases/tag/v0.38.2
-[trivy v0.37.2]: https://github.com/aquasecurity/trivy/releases/tag/v0.37.2
-[trivy v0.35.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.35.0
-[trivy v0.32.1]: https://github.com/aquasecurity/trivy/releases/tag/v0.32.1
-[trivy v0.29.2]: https://github.com/aquasecurity/trivy/releases/tag/v0.29.2
-[trivy v0.28.1]: https://github.com/aquasecurity/trivy/releases/tag/v0.28.1
-[trivy v0.26.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.26.0
-[trivy v0.25.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.25.0
-[trivy v0.24.2]: https://github.com/aquasecurity/trivy/releases/tag/v0.24.2
-[trivy v0.22.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.22.0
-[trivy v0.20.1]: https://github.com/aquasecurity/trivy/releases/tag/v0.20.1
-[trivy v0.20.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.20.0
-[trivy v0.19.2]: https://github.com/aquasecurity/trivy/releases/tag/v0.19.2
-[trivy v0.18.3]: https://github.com/aquasecurity/trivy/releases/tag/v0.18.3
-[trivy v0.17.2]: https://github.com/aquasecurity/trivy/releases/tag/v0.17.2
-[trivy v0.16.0]: https://github.com/aquasecurity/trivy/releases/tag/v0.16.0
-[trivy v0.9.2]: https://github.com/aquasecurity/trivy/releases/tag/v0.9.2
+Note: The version matrix is not exhaustive. For older versions please refer to https://github.com/aquasecurity/harbor-scanner-trivy 
 
 ## Deployment
-
-### Harbor >= 2.0 on Kubernetes
 
 In Harbor >= 2.0 Trivy can be configured as the default vulnerability scanner, therefore you can install it with the
 official [Harbor Helm chart], where `HARBOR_CHART_VERSION` >= 1.4:
@@ -141,29 +62,6 @@ helm install harbor harbor/harbor \
 
 The adapter service is automatically registered under the **Interrogation Service** in the Harbor interface and
 designated as the default scanner.
-
-### Harbor 1.10 on Kubernetes
-
-1. Install the `harbor-scanner-trivy` chart:
-
-   ```
-   helm repo add aqua https://aquasecurity.github.io/helm-charts
-   ```
-
-   ```
-   helm install harbor-scanner-trivy aqua/harbor-scanner-trivy \
-     --namespace harbor --create-namespace
-   ```
-
-2. Configure the scanner adapter in the Harbor interface.
-   1. Navigate to **Interrogation Services** and click **+ NEW SCANNER**.
-      ![Interrogation Services](docs/images/interrogation_services.png)
-   2. Enter <http://harbor-scanner-trivy.harbor:8080> as the **Endpoint** URL and click **TEST CONNECTION**.
-      ![Add scanner](docs/images/add_scanner.png)
-   3. If everything is fine click **ADD** to save the configuration.
-3. Select the **Trivy** scanner and set it as default by clicking **SET AS DEFAULT**.
-   ![Set Trivy as default scanner](docs/images/default_scanner.png)
-   Make sure the **Default** label is displayed next to the **Trivy** scanner's name.
 
 ## Configuration
 
@@ -256,16 +154,12 @@ requests.
 Harbor Scanner Adapter for Trivy is an [Aqua Security](https://aquasec.com) open source project.  
 Learn about our open source work and portfolio [here](https://www.aquasec.com/products/open-source-projects/).
 
-[release-img]: https://img.shields.io/github/release/aquasecurity/harbor-scanner-trivy.svg?logo=github
-[release]: https://github.com/aquasecurity/harbor-scanner-trivy/releases
-[build-action-img]: https://github.com/aquasecurity/harbor-scanner-trivy/workflows/build/badge.svg
-[actions]: https://github.com/aquasecurity/harbor-scanner-trivy/actions
-[report-card-img]: https://goreportcard.com/badge/github.com/aquasecurity/harbor-scanner-trivy
-[report-card]: https://goreportcard.com/report/github.com/aquasecurity/harbor-scanner-trivy
-[docker-pulls-aqua]: https://img.shields.io/docker/pulls/aquasec/harbor-scanner-trivy?logo=docker&label=docker%20pulls%20%2F%20aquasec
-[docker-pulls-harbor]: https://img.shields.io/docker/pulls/goharbor/trivy-adapter-photon?logo=docker&label=docker%20pulls%20%2F%20goharbor
-[license-img]: https://img.shields.io/github/license/aquasecurity/harbor-scanner-trivy.svg
-[license]: https://github.com/aquasecurity/harbor-scanner-trivy/blob/main/LICENSE
+[release-img]: https://img.shields.io/github/release/goharbor/harbor-scanner-trivy.svg?logo=github
+[release]: https://github.com/goharbor/harbor-scanner-trivy/releases
+[report-card-img]: https://goreportcard.com/badge/github.com/goharbor/harbor-scanner-trivy
+[report-card]: https://goreportcard.com/report/github.com/goharbor/harbor-scanner-trivy
+[license-img]: https://img.shields.io/github/license/goharbor/harbor-scanner-trivy.svg
+[license]: https://github.com/goharbor/harbor-scanner-trivy/blob/main/LICENSE
 
 [Harbor]: https://github.com/goharbor/harbor
 [Harbor Helm chart]: https://github.com/goharbor/harbor-helm
