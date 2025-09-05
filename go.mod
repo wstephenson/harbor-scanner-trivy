@@ -15,7 +15,7 @@ require (
 	github.com/prometheus/client_golang v1.19.0
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/samber/lo v1.47.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.11.1
 	github.com/testcontainers/testcontainers-go v0.32.0
 	golang.org/x/net v0.28.0
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
